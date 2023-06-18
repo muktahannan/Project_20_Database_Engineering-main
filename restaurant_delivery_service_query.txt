@@ -1,0 +1,63 @@
+
+1:
+SELECT cus_id, cus_name, cus_address
+from tbl_customer 
+order by cus_name desc;
+
+
+2.
+SELECT r.rest_id,rest_name,tbl_branch.branch_id,tbl_branch.branch_name
+FROM tbl_restaurant r
+INNER JOIN tbl_branch ON r.rest_id=tbl_branch.rest_id;
+
+3:
+SELECT * 
+FROM `tbl_branch` 
+WHERE rest_id in (SELECT rest_id FROM `tbl_restaurant` WHERE rest_name='BFC')
+
+4.
+SELECT *
+FROM `tbl_employee`
+WHERE emp_email LIKE '%yahoo%'
+
+5.
+SELECT avg( night_charge ) AS 'average charge'
+FROM `tbl_night_shift` 
+
+
+6.
+SELECT night_common_price,sum(night_charge)
+FROM `tbl_night_shift` 
+GROUP by night_common_price
+HAVING sum(night_charge)>15
+
+7.
+SELECT r.rest_id,rest_name,tbl_branch.branch_id,tbl_branch.branch_name
+FROM tbl_restaurant r
+INNER JOIN tbl_branch ON r.rest_id=tbl_branch.rest_id
+and tbl_branch.branch_address = (select address_id from tbl_address where address_location='27 Colmore Row Birmingham England B3 2EW')
+
+
+8. 
+SELECT r.rest_id,rest_name,tbl_branch.branch_id,tbl_branch.branch_name
+FROM tbl_restaurant r, tbl_branch
+WHERE r.rest_id=tbl_branch.rest_id;
+
+9.
+CREATE VIEW branch_veiw as
+SELECT branch_id,branch_name,address_location as address,rest_id
+FROM tbl_branch,tbl_address
+where address_id=branch_address;
+
+
+10.
+SELECT b.rest_id,r.rest_name,branch_id,b.branch_name
+FROM `branch_veiw` b, tbl_restaurant r
+WHERE r.rest_id=b.rest_id;
+
+
+11.BEGIN
+  IF NEW.cus_phonenumber NOT LIKE '01%' THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Phome No is not valid';
+  END IF;
+END
